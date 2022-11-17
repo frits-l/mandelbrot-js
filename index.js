@@ -2,21 +2,6 @@ const mandelFunc = (a, b, x, y) => {
   return [a * a - b * b + x, 2 * a * b + y];
 };
 
-// const mandel = (a, b, x, y, count = 0) => {
-//   const [aResult, bResult] = mandelFunc(a, b, x, y);
-//   const distance = Math.sqrt(Math.hypot(aResult - x, bResult - y));
-
-//   console.log("**distance", distance);
-//   if (distance < 20) {
-//     console.log("**count", count);
-//     return mandel(aResult, bResult, x, y, count + 1);
-//   } else {
-//     return count;
-//   }
-
-// return distance < 2 ? mandel(aResult, bResult, x, y, count + 1) : count;
-// };
-
 const mandelJs = (a, b, x, y, count = 0) => {
   const [aResult, bResult] = mandelFunc(a, b, x, y);
   const distance = Math.sqrt(Math.hypot(aResult - x, bResult - y));
@@ -27,7 +12,6 @@ const mandelJs = (a, b, x, y, count = 0) => {
     return count;
   }
 };
-import { mandel } from "./build/debug.js";
 
 class MandelFigure {
   width = 500;
