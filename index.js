@@ -25,7 +25,7 @@ class MandelFigure {
 
   data = [];
 
-  camera = { x: -250, y: -250, scale: 1 };
+  camera = { x: 0, y: 0, scale: 1 };
 
   constructor() {
     this.canvas.height = this.height;
@@ -54,21 +54,38 @@ class MandelFigure {
         this.camera.scale -= 1;
         this.tick();
       }
-
-      console.log("**e.key", e.key);
     };
 
     this.canvas.onclick = (e) => {
       const rect = this.canvas.getBoundingClientRect();
+
+      const mouseX = e.clientX - rect.left - this.width / 2;
+      const mouseY = e.clientY - rect.top - this.height / 2;
+
       const pos = {
-        x: e.clientX - rect.left - this.width,
-        y: e.clientY - rect.top - this.height,
+        x: this.camera.x + mouseX,
+        y: this.camera.y + mouseY,
       };
 
-      console.log(pos);
       this.camera = { ...pos, scale: this.camera.scale };
       this.tick();
     };
+
+    this.canvas.onwheel = (e) => {
+      const rect = this.canvas.getBoundingClientRect();
+
+      const mouseX = e.clientX - rect.left - this.width / 2;
+      const mouseY = e.clientY - rect.top - this.height / 2;
+
+      const factor = -(Math.abs(e.deltaY) / e.deltaY);
+
+      this.camera.x = this.camera.x + mouseX;
+      this.camera.y = this.camera.y + mouseY;
+      this.camera.scale += factor;
+      
+      this.tick();
+    };
+
   }
 
   fillData() {
@@ -77,8 +94,8 @@ class MandelFigure {
         const mandelResult = mandelJs(
           0,
           0,
-          (i + this.camera.x) / (this.camera.scale * 100),
-          (z + this.camera.y) / (this.camera.scale * 100),
+          (i + this.camera.x - this.width / 2) / (this.camera.scale * 100),
+          (z + this.camera.y - this.height / 2) / (this.camera.scale * 100),
           0
         );
         if (mandelResult % 2 == 0) {
@@ -104,8 +121,6 @@ class MandelFigure {
     const newImageData = this.ctx.createImageData(this.width, this.height);
     newImageData.data.set(this.data);
     this.ctx.putImageData(newImageData, 0, 0);
-
-    console.log("**this.data", this.data);
     // clear data after render
     this.data = [];
   }
