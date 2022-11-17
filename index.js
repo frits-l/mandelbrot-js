@@ -57,6 +57,18 @@ class MandelFigure {
 
       console.log("**e.key", e.key);
     };
+
+    this.canvas.onclick = (e) => {
+      const rect = this.canvas.getBoundingClientRect();
+      const pos = {
+        x: e.clientX - rect.left - this.width,
+        y: e.clientY - rect.top - this.height,
+      };
+
+      console.log(pos);
+      this.camera = { ...pos, scale: this.camera.scale };
+      this.tick();
+    };
   }
 
   fillData() {
